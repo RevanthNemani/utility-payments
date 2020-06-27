@@ -14,6 +14,9 @@ const {
   BillerMarketing,
   BillerCategory,
   Billers,
+  BillerServices,
+  ServiceInfo,
+  BillingInfo,
 } = require('../models/billers');
 
 //Enviroment Check

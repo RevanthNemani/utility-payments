@@ -167,11 +167,113 @@ const Billers = sequelize.define('billers', {
 
 const BillerServices = sequelize.define(
   'billerServices',
-  {},
+  {
+    serviceId: {
+      type: Sequelize.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'serviceId',
+    },
+    billerId: {
+      type: Sequelize.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      references: {
+        model: 'billers',
+        key: 'billerId',
+      },
+      field: 'billerId',
+    },
+  },
   { timestamps: false }
 );
-const ServiceInfo = sequelize.define('serviceInfo', {}, { timestamps: false });
-const BillingInfo = sequelize.define('billingInfo', {}, { timestamps: false });
+const ServiceInfo = sequelize.define(
+  'serviceInfo',
+  {
+    serviceId: {
+      type: Sequelize.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'billerServices',
+        key: 'serviceId',
+      },
+      field: 'serviceId',
+    },
+    Code: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field: 'Code',
+    },
+    Type: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field: 'Type',
+    },
+    EnShortDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: true,
+      field: 'EnShortDesc',
+    },
+    ArShortDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: true,
+      field: 'ArShortDesc',
+    },
+    EnDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: true,
+      field: 'EnDesc',
+    },
+    ArDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: true,
+      field: 'ArDesc',
+    },
+    PaymentType: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field: 'Type',
+    },
+  },
+  { timestamps: false }
+);
+const BillingInfo = sequelize.define(
+  'billingInfo',
+  {
+    serviceId: {
+      type: Sequelize.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'billerServices',
+        key: 'serviceId',
+      },
+      field: 'serviceId',
+    },
+    EnShortDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field: 'EnShortDesc',
+    },
+    ArShortDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field: 'ArShortDesc',
+    },
+    EnDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field: 'EnDesc',
+    },
+    ArDesc: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field: 'ArDesc',
+    },
+  },
+  { timestamps: false }
+);
 
 module.exports = {
   BillerInfo,
