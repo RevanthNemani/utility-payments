@@ -20,10 +20,10 @@ if (process.env.NODE_ENV === 'production') {
 
 exports.headCheck = (req, res, next) => {
   if (!req.header('x-api-key')) {
-    return res.status(400).json({ error: secretKeyNeeded });
+    return res.status(400).json({ error: 'secretKeyNeeded' });
   }
   if (req.header('x-api-key') !== SECRET_KEY) {
-    return res.status(401).json({ error: secretKeyWrong });
+    return res.status(401).json({ error: 'secretKeyWrong' });
   }
   next();
 };

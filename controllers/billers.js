@@ -9,15 +9,16 @@
 
 // * Importing models
 const {
-  BillerInfo,
-  BillerName,
-  BillerMarketing,
-  BillerCategory,
-  Billers,
-  BillerServices,
+  Info,
+  Name,
+  Marketing,
+  Category,
+  Biller,
+  Services,
   ServiceInfo,
   BillingInfo,
 } = require('../models/billers');
+const sequelize = require('../config/database');
 
 //Enviroment Check
 let SERVER_TYPE;
@@ -40,7 +41,115 @@ if (process.env.NODE_ENV === 'production') {
   PROXY_PORT = process.env.PROD_PROXY_PORT;
 }
 
-// GET get all billers /list-billers
+// GET get all active billers /billers/active
+exports.getActiveBillers = (req, res, next) => {
+  Biller.findAll({
+    attributes: ['billerId'],
+    include: [
+      {
+        model: Info,
+        as: 'BillerInfo',
+        attributes: ['Code', 'StmtBankCode', 'Website', 'Email', 'Phone'],
+      },
+      {
+        model: Name,
+        as: 'BillerName',
+        attributes: ['EnShortName', 'ArShortName', 'EnName', 'ArName'],
+      },
+      {
+        model: Marketing,
+        as: 'BillerMarketing',
+        attributes: ['EnLogo'],
+      },
+      {
+        model: Category,
+        as: 'BillerCategory',
+        attributes: ['EnShortName', 'ArShortName', 'EnName', 'ArName'],
+      },
+      {
+        model: Services,
+        where: { active: '1' },
+        as: 'BillerServices',
+        attributes: ['serviceId'],
+        include: [
+          {
+            model: ServiceInfo,
+            as: 'ServiceInfo',
+            attributes: [
+              'Code',
+              'Type',
+              'EnShortDesc',
+              'ArShortDesc',
+              'EnDesc',
+              'ArDesc',
+              'PaymentType',
+            ],
+          },
+          {
+            model: BillingInfo,
+            as: 'BillingInfo',
+            attributes: ['EnShortDesc', 'ArShortDesc', 'EnDesc', 'ArDesc'],
+          },
+        ],
+      },
+    ],
+    where: { active: '1' },
+  })
+    .then((breeds) => {
+      res
+        .status(200)
+        .json({ RecCount: breeds.length.toString(), BillersRec: breeds });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        message: err.message || 'Some error occurred',
+      });
+    });
+};
+
+// GET get all active billers /billers
 exports.getAllBillers = (req, res, next) => {
-  res.status(200).json({ success: 'ok' });
+  Biller.findAll({
+    include: [{ all: true, nested: true }],
+  })
+    .then((breeds) => {
+      res
+        .status(200)
+        .json({ RecCount: breeds.length.toString(), BillersRec: breeds });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        message: err.message || 'Some error occurred',
+      });
+    });
+};
+
+// POST Insert billers /billers
+exports.postBillers = (req, res, next) => {
+  const billersRec = req.body.BillersRec;
+  sequelize.transaction((t) => {
+    Biller.bulkCreate(
+      billersRec,
+      {
+        include: [{ all: true, nested: true }],
+      },
+      { transaction: t }
+    )
+      .then(() => {
+        res.status(200).json({ success: 1 });
+      })
+      .catch((err) => {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          res.status(400).json({
+            success: 0,
+            message: 'some billers are duplicates or already exist',
+          });
+        } else {
+          res.status(400).json({
+            success: 0,
+            message: err || 'Some error occurred',
+          });
+        }
+      });
+  });
 };

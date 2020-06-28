@@ -13,7 +13,13 @@ const billersController = require('../controllers/billers');
 
 const isAuth = require('../controllers/auth');
 
-// GET get all billers /list-billers
-router.get('/list-billers', billersController.getAllBillers);
+// GET get all active billers /list-billers
+router.get('/billers/active', billersController.getActiveBillers);
+
+// GET get all active billers /billers
+router.get('/billers', isAuth.headCheck, billersController.getAllBillers);
+
+// POST billers /list-billers
+router.post('/billers', isAuth.headCheck, billersController.postBillers);
 
 module.exports = router;

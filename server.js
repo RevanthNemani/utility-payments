@@ -37,12 +37,12 @@ const sequelize = require('./config/database');
 
 // * Importing models
 const {
-  BillerInfo,
-  BillerName,
-  BillerMarketing,
-  BillerCategory,
-  Billers,
-  BillerServices,
+  Info,
+  Name,
+  Marketing,
+  Category,
+  Biller,
+  Services,
   ServiceInfo,
   BillingInfo,
 } = require('./models/billers');
@@ -79,13 +79,118 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// * Billers Route
+// * Biller Route
 app.use(billersRoute);
 
 // * Error Route
 app.use(errorController.get404);
 
 // * Defining SQL relationships
+
+// Biller to Name
+Biller.hasOne(Name, {
+  constraints: true,
+  onDelete: 'CASCADE',
+  as: 'BillerName',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+// Name to Biller
+Name.belongsTo(Biller, {
+  as: 'BillerName',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+
+// Biller to Info
+Biller.hasOne(Info, {
+  constraints: true,
+  onDelete: 'CASCADE',
+  as: 'BillerInfo',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+// Info to Biller
+Info.belongsTo(Biller, {
+  as: 'BillerInfo',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+
+// Biller to Marketing
+Biller.hasOne(Marketing, {
+  constraints: true,
+  onDelete: 'CASCADE',
+  as: 'BillerMarketing',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+// Marketing to Biller
+Marketing.belongsTo(Biller, {
+  as: 'BillerMarketing',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+
+// Biller to Category
+Biller.hasOne(Category, {
+  constraints: true,
+  onDelete: 'CASCADE',
+  as: 'BillerCategory',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+// Category to Biller
+Category.belongsTo(Biller, {
+  as: 'BillerCategory',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+
+// Biller to Services
+Biller.hasMany(Services, {
+  constraints: true,
+  onDelete: 'CASCADE',
+  as: 'BillerServices',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+// Services to Biller
+Services.belongsTo(Biller, {
+  as: 'BillerServices',
+  key: 'billerId',
+  foreignKey: 'billerId',
+});
+
+// Services to ServiceInfo
+Services.hasOne(ServiceInfo, {
+  constraints: true,
+  onDelete: 'CASCADE',
+  as: 'ServiceInfo',
+  key: 'serviceId',
+  foreignKey: 'serviceId',
+});
+// ServiceInfo to Services
+ServiceInfo.belongsTo(Services, {
+  as: 'ServiceInfo',
+  key: 'serviceId',
+  foreignKey: 'serviceId',
+});
+
+// Services to BillingInfo
+Services.hasOne(BillingInfo, {
+  constraints: true,
+  onDelete: 'CASCADE',
+  as: 'BillingInfo',
+  key: 'serviceId',
+  foreignKey: 'serviceId',
+});
+// BillingInfo to Services
+BillingInfo.belongsTo(Services, {
+  as: 'BillingInfo',
+  key: 'serviceId',
+  foreignKey: 'serviceId',
+});
 
 // * Initialize sequelize and start service
 sequelize

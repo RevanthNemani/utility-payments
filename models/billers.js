@@ -9,7 +9,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../config/database');
 
-const BillerInfo = sequelize.define(
+const Info = sequelize.define(
   'billerInfo',
   {
     billerId: {
@@ -25,6 +25,7 @@ const BillerInfo = sequelize.define(
     Code: {
       type: Sequelize.STRING(255),
       allowNull: false,
+      unique: true,
       field: 'Code',
     },
     StmtBankCode: {
@@ -50,7 +51,7 @@ const BillerInfo = sequelize.define(
   },
   { timestamps: false }
 );
-const BillerName = sequelize.define(
+const Name = sequelize.define(
   'billerName',
   {
     billerId: {
@@ -65,6 +66,7 @@ const BillerName = sequelize.define(
     },
     EnShortName: {
       type: Sequelize.STRING(255),
+      unique: true,
       allowNull: true,
       field: 'EnShortName',
     },
@@ -86,7 +88,7 @@ const BillerName = sequelize.define(
   },
   { timestamps: false }
 );
-const BillerMarketing = sequelize.define(
+const Marketing = sequelize.define(
   'billerMarketing',
   {
     billerId: {
@@ -107,7 +109,7 @@ const BillerMarketing = sequelize.define(
   },
   { timestamps: false }
 );
-const BillerCategory = sequelize.define(
+const Category = sequelize.define(
   'billerCategory',
   {
     billerId: {
@@ -144,13 +146,19 @@ const BillerCategory = sequelize.define(
   { timestamps: false }
 );
 
-const Billers = sequelize.define('billers', {
+const Biller = sequelize.define('billers', {
   billerId: {
     type: Sequelize.INTEGER(10).UNSIGNED,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
     field: 'billerId',
+  },
+  active: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: 1,
+    allowNull: false,
+    fields: 'active',
   },
   createdAt: {
     type: 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
@@ -165,7 +173,7 @@ const Billers = sequelize.define('billers', {
   },
 });
 
-const BillerServices = sequelize.define(
+const Services = sequelize.define(
   'billerServices',
   {
     serviceId: {
@@ -183,6 +191,12 @@ const BillerServices = sequelize.define(
         key: 'billerId',
       },
       field: 'billerId',
+    },
+    active: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: 1,
+      allowNull: false,
+      fields: 'active',
     },
   },
   { timestamps: false }
@@ -233,7 +247,7 @@ const ServiceInfo = sequelize.define(
     PaymentType: {
       type: Sequelize.STRING(255),
       allowNull: false,
-      field: 'Type',
+      field: 'PaymentType',
     },
   },
   { timestamps: false }
@@ -276,12 +290,12 @@ const BillingInfo = sequelize.define(
 );
 
 module.exports = {
-  BillerInfo,
-  BillerName,
-  BillerMarketing,
-  BillerCategory,
-  Billers,
-  BillerServices,
+  Info,
+  Name,
+  Marketing,
+  Category,
+  Biller,
+  Services,
   ServiceInfo,
   BillingInfo,
 };
