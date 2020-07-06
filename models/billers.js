@@ -154,6 +154,12 @@ const Biller = sequelize.define('billers', {
     autoIncrement: true,
     field: 'billerId',
   },
+  billerCif: {
+    type: Sequelize.STRING(7),
+    allowNull: false,
+    field: 'billerCif',
+    defaultValue: '0002789',
+  },
   active: {
     type: Sequelize.BOOLEAN,
     defaultValue: 1,
@@ -173,34 +179,47 @@ const Biller = sequelize.define('billers', {
   },
 });
 
-const Services = sequelize.define(
-  'billerServices',
-  {
-    serviceId: {
-      type: Sequelize.INTEGER(10).UNSIGNED,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-      field: 'serviceId',
-    },
-    billerId: {
-      type: Sequelize.INTEGER(10).UNSIGNED,
-      allowNull: false,
-      references: {
-        model: 'billers',
-        key: 'billerId',
-      },
-      field: 'billerId',
-    },
-    active: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: 1,
-      allowNull: false,
-      fields: 'active',
-    },
+const Services = sequelize.define('billerServices', {
+  serviceId: {
+    type: Sequelize.INTEGER(10).UNSIGNED,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true,
+    field: 'serviceId',
   },
-  { timestamps: false }
-);
+  fcProdCode: {
+    type: Sequelize.STRING(255),
+    allowNull: false,
+    field: 'fcProdCode',
+    defaultValue: 'ONEC',
+  },
+  billerId: {
+    type: Sequelize.INTEGER(10).UNSIGNED,
+    allowNull: false,
+    references: {
+      model: 'billers',
+      key: 'billerId',
+    },
+    field: 'billerId',
+  },
+  active: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: 1,
+    allowNull: false,
+    fields: 'active',
+  },
+  createdAt: {
+    type: 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+    allowNull: true,
+    field: 'createdAt',
+  },
+  updatedAt: {
+    type:
+      'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+    allowNull: true,
+    field: 'updatedAt',
+  },
+});
 const ServiceInfo = sequelize.define(
   'serviceInfo',
   {

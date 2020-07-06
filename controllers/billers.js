@@ -44,7 +44,7 @@ if (process.env.NODE_ENV === 'production') {
 // GET get all active billers /billers/active
 exports.getActiveBillers = (req, res, next) => {
   Biller.findAll({
-    attributes: ['billerId'],
+    attributes: ['billerId', 'billerCif'],
     include: [
       {
         model: Info,
@@ -70,7 +70,7 @@ exports.getActiveBillers = (req, res, next) => {
         model: Services,
         where: { active: '1' },
         as: 'BillerServices',
-        attributes: ['serviceId'],
+        attributes: ['serviceId', 'fcProdCode'],
         include: [
           {
             model: ServiceInfo,
@@ -127,14 +127,10 @@ exports.getAllBillers = (req, res, next) => {
 // POST Insert billers /billers
 exports.postBillers = (req, res, next) => {
   const billersRec = req.body.BillersRec;
-  sequelize.transaction((t) => {
-    Biller.bulkCreate(
-      billersRec,
-      {
-        include: [{ all: true, nested: true }],
-      },
-      { transaction: t }
-    )
+  Biller.destroy({ where: {} }).then(() => {
+    Biller.bulkCreate(billersRec, {
+      include: [{ all: true, nested: true }],
+    })
       .then(() => {
         res.status(200).json({ success: 1 });
       })
