@@ -5,3 +5,5 @@
 >Copyright © 2020 alizz islamic Bank. All Rights Reserved.
 >
 >Author: Revanth Nemani <revanth.nemani@alizzislamic.com>
+
+## Rest services
