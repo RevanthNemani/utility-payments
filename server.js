@@ -47,8 +47,11 @@ const {
   BillingInfo,
 } = require('./models/billers');
 
+const { Token } = require('./models/token');
+
 // * Importing routers
 const billersRoute = require('./routes/billers');
+const tokenRoute = require('./routes/token');
 
 // * importing controllers
 const errorController = require('./controllers/error');
@@ -81,6 +84,9 @@ app.use(bodyParser.json());
 
 // * Biller Route
 app.use(billersRoute);
+
+// * Token Route
+app.use(tokenRoute);
 
 // * Error Route
 app.use(errorController.get404);

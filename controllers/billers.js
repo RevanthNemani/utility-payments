@@ -5,8 +5,6 @@
  * Author: Revanth Nemani <revanth.nemani@alizzislamic.com>
  */
 
-// CRUD for breed and images
-
 // * Importing models
 const {
   Info,
@@ -95,10 +93,10 @@ exports.getActiveBillers = (req, res, next) => {
     ],
     where: { active: '1' },
   })
-    .then((breeds) => {
+    .then((billers) => {
       res
         .status(200)
-        .json({ RecCount: breeds.length.toString(), BillersRec: breeds });
+        .json({ RecCount: billers.length.toString(), BillersRec: billers });
     })
     .catch((err) => {
       res.status(400).json({
@@ -112,10 +110,10 @@ exports.getAllBillers = (req, res, next) => {
   Biller.findAll({
     include: [{ all: true, nested: true }],
   })
-    .then((breeds) => {
+    .then((billers) => {
       res
         .status(200)
-        .json({ RecCount: breeds.length.toString(), BillersRec: breeds });
+        .json({ RecCount: billers.length.toString(), BillersRec: billers });
     })
     .catch((err) => {
       res.status(400).json({

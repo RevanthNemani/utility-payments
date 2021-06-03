@@ -1,5 +1,5 @@
 
-# wget -O utility-payments.tar.gz 'https://github.com/RevanthNemani/utility-payments/archive/v0.1.2.tar.gz'
+# wget -O utility-payments.tar.gz 'https://github.com/RevanthNemani/utility-payments/archive/v0.1.3.tar.gz'
 #tar -xzf utility-payments.tar.gz
 
 sudo echo '
@@ -79,11 +79,11 @@ npm prune
 sudo echo '
 [Unit]
 Description=utility-payments middleware for alizz islamic bank
-Documentation=https://gitlab.com/it/node/utility-payments
+Documentation=https://10.10.103.3:8080/it/node/utility-payments
 After=network.target
 
 [Service]
-WorkingDirectory=/home/node/utility-payments-0.1.2
+WorkingDirectory=/home/node/utility-payments-0.1.3
 User=node
 ExecStart=/usr/bin/node server.js
 StandardOutput=syslog
