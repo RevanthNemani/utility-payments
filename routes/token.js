@@ -17,7 +17,7 @@ const isAuth = require('../controllers/auth');
 router.get('/tokens', isAuth.headCheck, tokenController.getTokens);
 
 // GET a token based on tokenId /token/:tokenId
-router.get('/token/:tokenId', isAuth.headCheck, tokenController.getToken);
+router.get('/token/:tokenId', tokenController.getToken);
 
 // POST token /token
 router.post('/token', isAuth.headCheck, tokenController.postToken);
@@ -25,4 +25,5 @@ router.post('/token', isAuth.headCheck, tokenController.postToken);
 // PATCH token /token/:tokenId
 router.patch('/token/:tokenId', isAuth.headCheck, tokenController.patchToken);
 
+// export token routes
 module.exports = router;

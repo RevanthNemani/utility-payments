@@ -19,7 +19,7 @@ router.get('/billers/active', billersController.getActiveBillers);
 // GET get all active billers /billers
 router.get('/billers', isAuth.headCheck, billersController.getAllBillers);
 
-// POST billers /list-billers
+// POST billers /billers
 router.post('/billers', isAuth.headCheck, billersController.postBillers);
 
 module.exports = router;
